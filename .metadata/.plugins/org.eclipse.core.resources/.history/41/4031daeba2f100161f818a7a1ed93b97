@@ -1,0 +1,160 @@
+
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class titlelink
+ */
+@WebServlet("/titlelink")
+public class titlelink extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public titlelink() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		//response.getWriter().append("Served at: ").append(request.getContextPath());
+		String loginUser = "root";
+		String loginPassword = "281313";
+		
+		String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
+
+        response.setContentType("text/html");    // Response mime type
+
+        // Output stream to STDOUT
+        PrintWriter out = response.getWriter();
+        
+        try
+        {
+           //Class.forName("org.gjt.mm.mysql.Driver");
+           Class.forName("com.mysql.jdbc.Driver").newInstance();
+
+           Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPassword);
+           // Declare our statement
+           //if (request.getParameter("Search") != null)
+           //{
+
+           String title = request.getParameter("param");
+           
+           Statement statement = dbcon.createStatement();
+           String query = "select * from movies where title like '" + title + "';";
+           ResultSet movies = statement.executeQuery(query);
+           
+           movies.next();
+          
+           ///find stars in movie and create hyperlinks
+           Statement statement_tmp = dbcon.createStatement();
+    	   String query2 = "select star_id from stars_in_movies where movie_id like " + movies.getInt(1);
+           ResultSet starids = statement_tmp.executeQuery(query2);
+    	   
+    	   String starurl = new String("");
+    	   while (starids.next())
+	   		{
+    		   Statement statement_tmp2 = dbcon.createStatement();
+    		   int starid = starids.getInt(1);
+    		   String star_search_q = "select first_name, last_name from stars where id like " + starid + ";";
+    		   ResultSet starname = statement_tmp2.executeQuery(star_search_q);
+    		   starname.next();
+    		   String star_firstname = starname.getString(1), star_lastname = starname.getString(2);
+    		   starurl += "<a href = 'starlink?param=" + starid + "'>" + star_firstname + " " + star_lastname + "</a>, ";
+    		   starname.close();
+    		   statement_tmp2.close();
+	   		}
+    	   starurl = starurl.substring(0, starurl.length() - 2);
+           
+           ///find list of genres and create hyperlinks
+    	   String genre_urls = new String();
+    	   Statement stm_genres = dbcon.createStatement();
+    	   String query_genre = "select genre_id from genres_in_movies where movie_id like " + movies.getInt(1) + ";";
+    	   ResultSet genres_set = stm_genres.executeQuery(query_genre);
+    	   while (genres_set.next())
+    	   {
+    		   int genre_id = genres_set.getInt(1);
+    		   Statement stm_genre_name = dbcon.createStatement();
+    		   ResultSet genre_name = stm_genre_name.executeQuery("select name from genres where id like " + genre_id + ";");
+    		   genre_name.next();
+    		   String name = genre_name.getString(1);
+    		   genre_urls += "<a href = 'starlink?param=" + genre_id + "'>" + name + "</a>, ";
+    		   stm_genre_name.close();
+    		   genre_name.close();
+    	   }
+    	   genre_urls = genre_urls.substring(0, genre_urls.length() -2);
+    	   stm_genres.close();
+    	   genres_set.close();
+    	   
+           
+    	   out.println("<BODY BGCOLOR=\"#FDF5E6\">\n" +
+    			   		"<TABLE BORDER=1 ALIGN=\"CENTER\">\n" +
+    			   		"<TR BGCOLOR=\"#FFAD00\">\n" +
+    			   		"  <TH>Info Type<TH>Value\n" +
+    			   		"<TR>\n" +
+    			   		"  <TD>ID\n" +
+    			   		"  <TD>" + movies.getInt(1) + "\n" +
+    			   		"<TR>\n" +
+    			   		"  <TD>title\n" +
+    			   		"  <TD>" + movies.getString(2) + "</a>\n" +
+    			   		"<TR>\n" +
+    			   		"  <TD>Year\n" +
+    			   		"  <TD>" + movies.getInt(3) + "\n" +
+    			   		"<TR>\n" +
+    			   		"  <TD>Director\n" +
+    			   		"  <TD>" + movies.getString(4) + "\n" +
+    			   		"<TR>\n" +
+    			   		"  <TD>Genres\n" +
+    			   		"  <TD>" +  + "\n" +
+    			   		"<TR>\n" +
+    			   		
+    			   		
+    			   		"  <TD>Stars\n" +
+    			   		"  <TD>" + starurl + "\n" +
+    			   		"<TR>\n" +
+    			   		"  <TD>Banner\n" +
+    			   		"  <TD>" + movies.getString(5) + "\n" +
+    			   		"<TR>\n" +
+    			   		"  <TD>Trailer\n" +
+    			   		"  <TD>" + movies.getString(6) + "\n" +
+    			   		
+    			   		"</TR>"+               
+    			   		"</TABLE>\n"); 
+       
+           out.println("</BODY></HTML>"); 
+           movies.close();
+           dbcon.close();
+           statement.close();
+            
+        }
+        catch (Exception e)
+        {
+        	out.println(e);
+        }
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
+}

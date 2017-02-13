@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>login</title>
+</head>
+<body>
+<H1 ALIGN="CENTER">Form Example</H1>
+
+<FORM ACTION="/servlet/login"
+      METHOD="POST">
+  Email: <INPUT TYPE="TEXT" NAME="email"><BR>
+
+  Password: <INPUT TYPE="PASSWORD" NAME="password"><BR>
+  <CENTER>
+    <INPUT TYPE="SUBMIT" VALUE="Submit Order">
+  </CENTER>
+</FORM>
+
+</body>
+</html>

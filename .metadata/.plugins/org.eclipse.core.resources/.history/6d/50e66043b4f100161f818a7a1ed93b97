@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Main</title>
+</head>
+<body>
+<H1 ALIGN="CENTER">Looking for a Movie?</H1>
+<FORM ACTION="search"
+      METHOD="POST">
+      <CENTER>
+  Title: <INPUT TYPE="text" NAME="title"><BR>
+  
+  Year: <INPUT TYPE="TEXT" NAME="year"><BR>
+  
+  Director: <INPUT TYPE="TEXT" NAME="director"><BR>
+  
+  Star's first name: <INPUT TYPE="TEXT" NAME="first_name"><BR>
+
+  Star's last name: <INPUT TYPE="TEXT" NAME="last_name"><BR>
+  
+    <INPUT TYPE="SUBMIT" VALUE="Search">
+  </CENTER>
+</FORM>
+
+<H1 ALIGN="center">Or Browse?</H1>
+
+<FORM ACTION="browse"
+      METHOD="POST">
+      <CENTER>
+  Title: <INPUT TYPE="text" NAME="title"><BR>
+  
+  Year: <INPUT TYPE="TEXT" NAME="year"><BR>
+  
+  Director: <INPUT TYPE="TEXT" NAME="director"><BR>
+  
+  Star's name: <INPUT TYPE="TEXT" NAME="star_name"><BR>
+
+  
+    <INPUT TYPE="SUBMIT" VALUE="Browse">
+  </CENTER>
+</FORM>
+</body>
+</html>

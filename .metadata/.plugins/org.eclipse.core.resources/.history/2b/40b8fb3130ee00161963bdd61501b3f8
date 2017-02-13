@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<H1 ALIGN="CENTER">Fablix Login</H1>
+
+<FORM ACTION="login"
+      METHOD="POST">
+  Email: <INPUT TYPE="TEXT" NAME="email"><BR>
+
+  Password: <INPUT TYPE="PASSWORD" NAME="password"><BR>
+  <CENTER>
+    <INPUT TYPE="SUBMIT" VALUE="Submit Order">
+  </CENTER>
+</FORM>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Looking for A Movie?</title>
+</head>
+<body>
+<FORM ACTION="search"
+      METHOD="POST">
+      <CENTER>
+  Title: <INPUT TYPE="text" NAME="title"><BR>
+  
+  Year: <INPUT TYPE="TEXT" NAME="year"><BR>
+  
+  Director: <INPUT TYPE="TEXT" NAME="director"><BR>
+  
+  Star's name: <INPUT TYPE="TEXT" NAME="star_name"><BR>
+
+  
+    <INPUT TYPE="SUBMIT" VALUE="Search">
+  </CENTER>
+</FORM>
+</body>
+</html>

@@ -1,0 +1,100 @@
+
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class genrelink
+ */
+@WebServlet("/genrelink")
+public class genrelink extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public genrelink() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		//response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		String loginUser = "root";
+		String loginPassword = "281313";
+		
+		String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
+
+        response.setContentType("text/html");    // Response mime type
+
+        // Output stream to STDOUT
+        PrintWriter out = response.getWriter();
+        
+        try
+        {
+           //Class.forName("org.gjt.mm.mysql.Driver");
+           Class.forName("com.mysql.jdbc.Driver").newInstance();
+
+           Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPassword);
+           // Declare our statement
+           //if (request.getParameter("Search") != null)
+           //{
+
+           int genreid = Integer.parseInt(request.getParameter("param"));
+           
+           //find movie ids for a given genre
+           Statement statement = dbcon.createStatement();
+           String query = "select movie_id from genres_in_movies where genre_id like '" + genreid + "';";
+           ResultSet movieid_set = statement.executeQuery(query);
+           
+           
+           ///find movie given id
+           while(movieid_set.next())
+           {
+        	   int movieid = movieid_set.getInt(1);
+        	   Statement stm_movies = dbcon.createStatement();
+        	   ResultSet movies = stm_movies.executeQuery("select * from movies where id like " + movieid + ";");
+        	   
+        	   //print movie infomation
+        	   
+        	   printMovies.print(movies, dbcon, out);
+        	   
+        	   
+        	   stm_movies.close();
+        	   movies.close();
+           }
+           //out.println("</BODY></HTML>"); 
+           dbcon.close();
+           statement.close();
+            
+        }
+        catch (Exception e)
+        {
+        	out.println(e);
+        }
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
+}
