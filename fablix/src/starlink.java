@@ -35,10 +35,6 @@ public class starlink extends HttpServlet {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		
-		String loginUser = "root";
-		String loginPassword = "281313";
-		
-		String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
 
         response.setContentType("text/html");    // Response mime type
 
@@ -47,14 +43,9 @@ public class starlink extends HttpServlet {
         
         try
         {
-           //Class.forName("org.gjt.mm.mysql.Driver");
-           Class.forName("com.mysql.jdbc.Driver").newInstance();
-
-           Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPassword);
-           // Declare our statement
-           //if (request.getParameter("Search") != null)
-           //{
-
+           
+           Connection dbcon = helper.createConnection();
+           
            int id = Integer.parseInt(request.getParameter("param"));
            //find star info
            Statement statement = dbcon.createStatement();
@@ -96,7 +87,8 @@ public class starlink extends HttpServlet {
     			   		"  <TD>" + star.getDate(4) + "\n" +
     			   		"<TR>\n" +
     			   		"  <TD>Photo\n" +
-    			   		"  <TD>" + star.getString(5) + "\n" +
+    			   		"  <TD><img style='border-bottom:3px solid #999999;' src='" + 
+    			   			star.getString(5) + "'>\n" +
     			   		"<TR>\n" +
     			   		"  <TD>Movies\n" +
     			   		"  <TD>" + titleurls + "\n" +

@@ -35,26 +35,19 @@ public class genrelink extends HttpServlet {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		
-		String loginUser = "root";
-		String loginPassword = "281313";
 		
-		String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
-
         response.setContentType("text/html");    // Response mime type
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
-        
+        out.print("<BODY BGCOLOR=\"#FDF5E6\">\n" +
+		   		"<TABLE BORDER=1 ALIGN=\"CENTER\">\n" +
+		   		"<TR BGCOLOR=\"#FFAD00\">\n" +
+		   		"  <TH>ID<TH>Title<TH>Year<TH>Director<TH>Stars<TH>Genres\n" );
         try
         {
-           //Class.forName("org.gjt.mm.mysql.Driver");
-           Class.forName("com.mysql.jdbc.Driver").newInstance();
-
-           Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPassword);
-           // Declare our statement
-           //if (request.getParameter("Search") != null)
-           //{
-
+           
+           Connection dbcon = helper.createConnection();
            int genreid = Integer.parseInt(request.getParameter("param"));
            
            //find movie ids for a given genre
@@ -69,16 +62,70 @@ public class genrelink extends HttpServlet {
         	   int movieid = movieid_set.getInt(1);
         	   Statement stm_movies = dbcon.createStatement();
         	   ResultSet movies = stm_movies.executeQuery("select * from movies where id like " + movieid + ";");
-        	   
+        	   movies.next();
         	   //print movie infomation
         	   
-        	   printMovies.print(movies, dbcon, out);
+        	   Statement statement_tmp = dbcon.createStatement();
+         	   String query2 = "select star_id from stars_in_movies where movie_id like " + movies.getInt(1);
+               ResultSet starids = statement_tmp.executeQuery(query2);
+         	   
+         	   String titleurl = "'titlelink?param=" + movies.getString(2) + "'>";
+         	   String starurl = new String("");
+         	   while (starids.next())
+    		   {
+         		   Statement statement_tmp2 = dbcon.createStatement();
+         		   int starid = starids.getInt(1);
+         		   String star_search_q = "select first_name, last_name from stars where id like " + starid + ";";
+         		   ResultSet starname = statement_tmp2.executeQuery(star_search_q);
+         		   starname.next();
+         		   String star_firstname = starname.getString(1), star_lastname = starname.getString(2);
+         		   starurl += "<a href = 'starlink?param=" + starid + "'>" + star_firstname + " " + star_lastname + "</a>, ";
+         		   starname.close();
+         		   statement_tmp2.close();
+    		   }
+         	   if  (starurl.length() > 2)
+         		   starurl = starurl.substring(0, starurl.length() - 2);
+         	   
+         	   
+         	   ///find genres for a given movie
+         	   String genres = new String();
+         	   Statement stm_genres = dbcon.createStatement();
+         	   String query_genre = "select genre_id from genres_in_movies where movie_id like " + movies.getInt(1) + ";";
+         	   ResultSet genres_set = stm_genres.executeQuery(query_genre);
+         	   while (genres_set.next())
+         	   {
+         		   int genre_id = genres_set.getInt(1);
+         		   Statement stm_genre_name = dbcon.createStatement();
+         		   ResultSet genre_name = stm_genre_name.executeQuery("select name from genres where id like " + genre_id + ";");
+         		   genre_name.next();
+         		   String name = genre_name.getString(1);
+         		   genres += name + ", ";
+         		   stm_genre_name.close();
+         		   genre_name.close();
+         	   }
+         	   if (genres.length() > 2)
+         		   genres = genres.substring(0, genres.length() -2);
+         	   stm_genres.close();
+         	   genres_set.close();
+         	   
+         	   out.println("<TR>\n" +
+         			   		"  <TD>" + movies.getInt(1) + 
+         			   		"  <TD><a href = " + titleurl + movies.getString(2) + "</a>" +
+         			   		"  <TD>" + movies.getInt(3) + 
+         			   		"  <TD>" + movies.getString(4) + 
+         			   		"  <TD>" + starurl + 
+         			   		"  <TD>" + genres + 
+         			   		
+         			   		"</TR>\n"); 
+         	   starids.close();
+         	   statement_tmp.close();
         	   
         	   
         	   stm_movies.close();
         	   movies.close();
            }
-           //out.println("</BODY></HTML>"); 
+           out.println("</TABLE>\n");
+           out.println("</BODY></HTML>"); 
            dbcon.close();
            statement.close();
             
