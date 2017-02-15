@@ -35,22 +35,17 @@ public class browse extends HttpServlet {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		
-		String loginUser = "root";
-		String loginPassword = "281313";
-		
-		String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
-
         response.setContentType("text/html");    // Response mime type
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
-        
+        out.println("<a href='shoppingcart.jsp'>Shopping Cart</a>");
         try
         {
            //Class.forName("org.gjt.mm.mysql.Driver");
            Class.forName("com.mysql.jdbc.Driver").newInstance();
 
-           Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPassword);
+           Connection dbcon = helper.createConnection();
            // Declare our statement
            //if (request.getParameter("Search") != null)
            //{

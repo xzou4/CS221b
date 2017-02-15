@@ -32,6 +32,47 @@ public class shoppingCartController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
+		int id = Integer.parseInt(request.getParameter("id"));
+		String action = request.getParameter("action");
+		HttpSession session = request.getSession();
+		List<item> cart = new ArrayList<>();
+		if (action.equals("order_now"))
+		{
+			if (session.getAttribute("cart") == null)
+			{
+				cart = new ArrayList<>();
+				cart.add(new item(id));
+			}
+			else
+			{
+				cart = (ArrayList<item>)session.getAttribute("cart");
+				int indicator = contains(id, cart);
+				if (indicator == -1)
+					cart.add(new item(id));
+				else
+					cart.get(indicator).addQuantity(1);
+			}
+		}
+		else if (action.equals("delete"))
+		{
+			cart = (ArrayList<item>)session.getAttribute("cart");
+			int index = contains(id, cart);
+			cart.remove(cart.get(index));
+		}
+		
+		
+		session.setAttribute("cart", cart);
+		request.getRequestDispatcher("shoppingcart.jsp").forward(request, response);
+	}
+	
+	private int contains(int id, List<item> cart)
+	{
+		for (int i = 0; i < cart.size(); i++)
+		{
+			if (cart.get(i).getId() == id)
+				return i;
+		}
+		return -1;
 	}
 
 	/**
@@ -40,20 +81,20 @@ public class shoppingCartController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
-		int id = Integer.parseInt(request.getParameter("id"));
-		HttpSession session = request.getSession();
-		List<item> cart;
-		if (session.getAttribute("cart") == null)
+		String action = request.getParameter("action");
+		String[] quantity = request.getParameterValues("quantity");
+		if (action.equals("update"))
 		{
-			cart = new ArrayList<>();
+			HttpSession session = request.getSession();
+			List<item> cart = (ArrayList<item>)session.getAttribute("cart");
+			for (int i = 0; i < cart.size(); i++)
+			{
+				cart.get(i).setQuantity(Integer.parseInt(quantity[i]));
+			}
+			
+			session.setAttribute("cart", cart);
+			request.getRequestDispatcher("shoppingcart.jsp").forward(request, response);
 		}
-		else
-		{
-			cart = (ArrayList<item>)session.getAttribute("cart");
-		}
-		cart.add(new item(id));
-		session.setAttribute("cart", cart);
-		request.getRequestDispatcher("shoppingcart.jsp").forward(request, response);
 	}
 
 }

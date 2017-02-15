@@ -1,0 +1,23 @@
+//item class for item in shopping cart
+public class item {
+	
+	public int id;
+	public int price;
+	public int quantity;
+	
+	public item(int id, int price)
+	{
+		this.id = id;
+		this.price = price;
+		quantity = 1;
+	}
+	
+	public item(int id)
+	{
+		this.id = id;
+		price = 1;
+		quantity = 1;
+	}
+	
+	
+}

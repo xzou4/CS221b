@@ -40,6 +40,7 @@ public class starlink extends HttpServlet {
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
+        out.println("<a href='shoppingcart.jsp'>Shopping Cart</a>");
         
         try
         {

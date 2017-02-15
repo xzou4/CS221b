@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Checkout</title>
+</head>
+<body>
+<H1 ALIGN="CENTER">Checkout Table</H1>
+
+<FORM ACTION="checout"
+      METHOD="GET">
+      <CENTER>
+  First name: <INPUT TYPE="TEXT" NAME="first_name"><BR>
+  
+  Last name: <INPUT TYPE="TEXT" NAME="last_name"><BR>
+  
+  Credit Card Number: <INPUT TYPE="TEXT" NAME="id"><BR>
+
+  Expire Date (MM/DD/YYYY): <INPUT TYPE="TEXT" NAME="expiration"><BR>
+  
+    <INPUT TYPE="SUBMIT" VALUE="Submit">
+  </CENTER>
+</FORM>
+</body>
+</html>

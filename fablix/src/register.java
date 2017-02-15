@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class register
@@ -32,12 +33,7 @@ public class register extends HttpServlet {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		
-		String loginUser = "root";
-		String loginPassword = "281313";
-		
-		String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
-
-        response.setContentType("text/html");    // Response mime type
+		response.setContentType("text/html");    // Response mime type
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
@@ -45,9 +41,8 @@ public class register extends HttpServlet {
         try
         {
            //Class.forName("org.gjt.mm.mysql.Driver");
-           Class.forName("com.mysql.jdbc.Driver").newInstance();
-
-           Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPassword);
+           
+           Connection dbcon = helper.createConnection();
            // Declare our statement
            String id = request.getParameter("id");
            String first_name = request.getParameter("first_name");
@@ -77,10 +72,13 @@ public class register extends HttpServlet {
            statement.setString(7, password);
            
            statement.executeUpdate();
-           out.println("<script type=\"text/javascript\">");  
-           out.println("alert('Welcome " + first_name + "!');");
-           out.println("location='main.html';");
-           out.println("</script>");
+           
+           userInfo info = new userInfo(email, password);
+           HttpSession session = request.getSession();
+           session.setAttribute("userInfo", info);
+           
+           response.sendRedirect("search");
+           
            
            dbcon.close();
            statement.close();

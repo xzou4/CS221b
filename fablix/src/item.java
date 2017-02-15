@@ -1,22 +1,25 @@
 //item class for item in shopping cart
 public class item {
 	
-	public int id;
-	public int price;
-	public int number;
+	private int id;
+	private int price;
+	private int quantity;
+	private String name;
 	
 	public item(int id, int price)
 	{
 		this.id = id;
 		this.price = price;
-		number = 1;
+		quantity = 1;
+		name = helper.getMovieName(id);
 	}
 	
 	public item(int id)
 	{
 		this.id = id;
 		price = 1;
-		number = 1;
+		quantity = 1;
+		name = helper.getMovieName(id);
 	}
 	
 	public int getId()
@@ -24,13 +27,28 @@ public class item {
 		return id;
 	}
 	
-	public int getNumber()
+	public int getPrice()
 	{
-		return number;
+		return price;
 	}
 	
-	public void setNumber(int newnumber)
+	public int getQuantity()
 	{
-		number = newnumber;
+		return quantity;
+	}
+	
+	public String getName()
+	{
+		return name;
+	}
+	
+	public void addQuantity(int extraQuantity)
+	{
+		quantity += extraQuantity;
+	}
+	
+	public void setQuantity(int quantity)
+	{
+		this.quantity = quantity;
 	}
 }

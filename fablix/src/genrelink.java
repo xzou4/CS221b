@@ -40,6 +40,7 @@ public class genrelink extends HttpServlet {
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
+        out.println("<a href='shoppingcart.jsp'>Shopping Cart</a>");
         out.print("<BODY BGCOLOR=\"#FDF5E6\">\n" +
 		   		"<TABLE BORDER=1 ALIGN=\"CENTER\">\n" +
 		   		"<TR BGCOLOR=\"#FFAD00\">\n" +

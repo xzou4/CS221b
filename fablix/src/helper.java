@@ -27,4 +27,49 @@ public class helper {
         
         return dbcon;
 	}
+	
+	public static String getMovieName(int id)
+	{
+		try
+		{
+			Connection dbcon = createConnection();
+			
+			Statement statement = dbcon.createStatement();
+			ResultSet title = statement.executeQuery("select title from movies where id like " + id + ";");
+			title.next();
+			String name = title.getString(1);
+			dbcon.close();
+			title.close();
+			return name;
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		return "";
+	}
+	
+	public static boolean isValidUser(String email, String password)
+	{
+		try
+		{
+			Connection dbcon = createConnection();
+	        // Declare our statement
+	        Statement statement = dbcon.createStatement();
+	
+	        String query = "SELECT password from customers where email = '" + email + "'";
+	
+	        // Perform the query
+	        ResultSet rs = statement.executeQuery(query);
+	        String pwd = rs.getString(1);
+	        dbcon.close();
+            rs.close();
+            statement.close();
+	        return pwd.equals(password);
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
+	}
 }

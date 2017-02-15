@@ -37,10 +37,10 @@ public class titlelink extends HttpServlet {
 		
 
         response.setContentType("text/html");    // Response mime type
-
+        
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
-        
+        out.println("<a href='shoppingcart.jsp'>Shopping Cart</a>");
         try
         {
            //Class.forName("org.gjt.mm.mysql.Driver");
@@ -134,7 +134,7 @@ public class titlelink extends HttpServlet {
     			   		
     			   		"</TR>"+               
     			   		"</TABLE>\n"); 
-    	   out.print("<center><a href=shoppingCartController?id='" + movies.getInt(1) + "'>Order Now</a></center>");
+    	   out.print("<center><a href=shoppingCartController?id=" + movies.getInt(1) + "&action=order_now>Order Now</a></center>");
            out.println("</BODY></HTML>"); 
            movies.close();
            dbcon.close();

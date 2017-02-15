@@ -1,0 +1,44 @@
+//item class for item in shopping cart
+public class item {
+	
+	public int id;
+	public int price;
+	public int quantity;
+	public String name;
+	
+	public item(int id, int price)
+	{
+		this.id = id;
+		this.price = price;
+		quantity = 1;
+		name = helper.getMovieName(id);
+	}
+	
+	public item(int id)
+	{
+		this.id = id;
+		price = 1;
+		quantity = 1;
+		name = helper.getMovieName(id);
+	}
+	
+	public int getId()
+	{
+		return id;
+	}
+	
+	public int getPrice()
+	{
+		return price;
+	}
+	
+	public int getQuantity()
+	{
+		return quantity;
+	}
+	
+	public String getName()
+	{
+		return name;
+	}
+}
